@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Boutique BO7 Farm XP - Ennemis immobiles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Service de parties multijoueur BO7 avec ennemis immobiles : farm XP, défis et camouflages contre des joueurs qui ne bougent pas. Aucun prêt de compte, vous rejoignez nos agents directement en jeu." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050712;
+      --bg-alt: #080b18;
+      --accent: #6b5bff;
+      --accent-soft: rgba(107, 91, 255, 0.25);
+      --accent-2: #12c2e9;
+      --text: #f5f5f7;
+      --muted: #9ca3af;
+      --danger: #ff3b6a;
+      --radius-xl: 1.5rem;
+      --radius-lg: 1rem;
+      --shadow-soft: 0 18px 60px rgba(0, 0, 0, 0.5);
+      --blur-glass: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, #16172a 0, #050712 55%, #02030a 100%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* Header */
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, rgba(107, 91, 255, 0.18), rgba(5, 7, 18, 0.96));
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 0.75rem;
+      z-index: 50;
+      backdrop-filter: blur(var(--blur-glass));
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: conic-gradient(from 180deg, #6b5bff, #12c2e9, #ff3b6a, #6b5bff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 18px rgba(107, 91, 255, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: inherit;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.5));
+    }
+
+    .logo-icon span {
+      position: relative;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+    }
+
+    .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+
+    .logo-title {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    .logo-sub { font-size: 0.7rem; color: var(--muted); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.15rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .nav-links a {
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      color: var(--muted);
+      transition: all 0.18s ease-out;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(148, 163, 184, 0.16);
+    }
+
+    .nav-links a.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b1020;
+      font-weight: 600;
+      box-shadow: 0 0 20px rgba(79, 70, 229, 0.7);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.7rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .pill-strong { color: var(--text); font-weight: 500; }
+
+    /* Hero */
+
+    main {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 3vw + 1rem, 3rem);
+      line-height: 1.05;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 32rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.3rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .hero-meta span i { font-size: 0.8rem; }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.8rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.18s ease-out;
+      font-weight: 500;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #020617;
+      box-shadow: 0 16px 35px rgba(15, 23, 42, 0.9), 0 0 30px rgba(79, 70, 229, 0.8);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.95), 0 0 40px rgba(79, 70, 229, 0.95);
+    }
+
+    .btn-outline {
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+    }
+
+    .btn-outline:hover {
+      background: rgba(15, 23, 42, 0.95);
+      border-color: rgba(148, 163, 184, 0.9);
+    }
+
+    .btn span.icon { font-size: 1.1rem; }
+
+    .hero-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-note span {
+      color: var(--accent-2);
+      font-weight: 500;
+    }
+
+    /* Hero Card */
+
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      padding: 1.3rem 1.2rem;
+      background: radial-gradient(circle at top left, rgba(107, 91, 255, 0.24), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      backdrop-filter: blur(var(--blur-glass));
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-card-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .hero-card-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.95);
+    }
+
+    .hero-card-body {
+      border-radius: var(--radius-lg);
+      padding: 0.9rem;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .hero-session-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .hero-session-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-session-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+    }
+
+    .tag {
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--muted);
+    }
+
+    .hero-badge-price {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: rgba(148, 163, 184, 0.9);
+      margin-bottom: 0.2rem;
+      text-align: right;
+    }
+
+    .hero-price {
+      text-align: right;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-price-main {
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .hero-price-main span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .hero-price-note {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .hero-timeline {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .hero-timeline span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px dashed rgba(148, 163, 184, 0.4);
+    }
+
+    .hero-card-footer {
+      margin-top: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card-footer strong { color: var(--accent-2); }
+
+    .hero-mini-avatars {
+      display: flex;
+      align-items: center;
+      gap: -0.35rem;
+    }
+
+    .hero-mini-avatar {
+      width: 23px;
+      height: 23px;
+      border-radius: 999px;
+      border: 2px solid rgba(15, 23, 42, 0.95);
+      background: radial-gradient(circle at top, #1e293b, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: var(--muted);
+      box-shadow: 0 0 14px rgba(15, 23, 42, 0.9);
+    }
+
+    .glow-orb {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(79, 70, 229, 0.95), transparent 60%);
+      filter: blur(8px);
+      opacity: 0.35;
+      top: -70px;
+      right: -80px;
+      pointer-events: none;
+      animation: pulseGlow 6s ease-in-out infinite;
+    }
+
+    /* Sections */
+
+    section { margin-top: 3rem; }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 25rem;
+    }
+
+    .grid { display: grid; gap: 1.1rem; }
+
+    @media (min-width: 768px) {
+      .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-title { font-size: 1rem; font-weight: 600; }
+
+    .card-badge {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .card-price {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .card-price span {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.7rem;
+      min-height: 3rem;
+    }
+
+    .card-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .card-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+      margin-right: 0.6rem;
+    }
+
+    .card-meta span i { font-size: 0.9rem; }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .card-footer strong { color: var(--accent-2); }
+
+    .btn-card { padding: 0.55rem 0.9rem; font-size: 0.8rem; }
+
+    .card-highlight {
+      border-color: rgba(107, 91, 255, 0.9);
+      box-shadow: 0 0 40px rgba(79, 70, 229, 0.6);
+      background: radial-gradient(circle at top left, rgba(107, 91, 255, 0.22), rgba(15, 23, 42, 0.98));
+    }
+
+    .glow-line {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(79, 70, 229, 0.2), transparent);
+      opacity: 0.7;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    /* Steps */
+
+    .steps { display: grid; gap: 0.9rem; }
+
+    .step {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.6rem 0.75rem;
+      align-items: flex-start;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .step-index {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, var(--accent), var(--accent-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #020617;
+      box-shadow: 0 0 18px rgba(79, 70, 229, 0.9);
+    }
+
+    .step-title {
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.1rem;
+    }
+
+    /* Avis */
+
+    .review {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .review-text { margin-bottom: 0.5rem; }
+
+    .review-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .review-user {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .review-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #111827, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .review-stars { font-size: 0.8rem; color: #fbbf24; }
+
+    /* FAQ */
+
+    .faq-item {
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 0.75rem 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .faq-question {
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    /* Contact */
+
+    .contact-grid { display: grid; gap: 1rem; }
+
+    @media (min-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1.1fr 1.2fr;
+      }
+    }
+
+    .contact-info { font-size: 0.8rem; color: var(--muted); }
+
+    .discord-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.78rem;
+      margin-top: 0.4rem;
+    }
+
+    .discord-tag span.emoji { font-size: 1rem; }
+
+    form {
+      display: grid;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    label { display: block; margin-bottom: 0.15rem; color: var(--muted); }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.6rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.8rem;
+      outline: none;
+      transition: border-color 0.18s ease-out, box-shadow 0.18s ease-out, background 0.18s ease-out;
+      resize: vertical;
+      min-height: 38px;
+    }
+
+    input::placeholder, textarea::placeholder { color: #6b7280; }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    textarea { min-height: 80px; }
+
+    .form-row-inline { display: grid; gap: 0.5rem; }
+
+    @media (min-width: 600px) {
+      .form-row-inline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .form-note {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(30, 64, 175, 0.8);
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--accent-2); }
+
+    /* Responsive */
+
+    @media (max-width: 768px) {
+      header { border-radius: 1rem; }
+      nav { display: none; }
+      main { grid-template-columns: minmax(0, 1fr); margin-top: 1.5rem; }
+      .hero-card { margin-top: 0.75rem; }
+      section { margin-top: 2.5rem; }
+      .page { padding-left: 1rem; padding-right: 1rem; }
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.03); }
+      100% { opacity: 0.4; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">
+        <span>BO7</span>
+      </div>
+      <div class="logo-text">
+        <div class="logo-title">GiovaniShopBots</div>
+        <div class="logo-sub">Parties multijoueur • Ennemis immobiles</div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-links">
+        <a href="#packs" class="active">Packs</a>
+        <a href="#infos">Infos</a>
+        <a href="#how">Déroulement</a>
+        <a href="#contact">Réserver</a>
+      </div>
+      <div class="pill">
+        <span class="pill-dot"></span>
+        <span class="pill-strong">Sessions en ligne</span> / ce soir
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <div>
+      <h1 class="hero-title">
+        Farm <span>XP & défis</span> sur BO7<br>contre des ennemis immobiles.
+      </h1>
+
+      <p class="hero-subtitle">
+        Nous lançons des parties multijoueur avec toi, face à une équipe composée uniquement
+        de joueurs immobiles (nos consoles). Résultat : tu es seul à profiter de tous les kills
+        et de toute l’XP, sans prêt de compte, comme dans une partie classique.
+      </p>
+
+      <div class="hero-meta">
+        <span><i>🎮</i> Ennemis immobiles qui ne t’attaquent pas</span>
+        <span><i>📈</i> 80 à 150 éliminations / 10 min (en moyenne)</span>
+        <span><i>🔓</i> Défis, camos, précision, tout est possible</span>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="scrollToId('packs')">
+          <span class="icon">🔥</span>
+          Voir les packs
+        </button>
+        <button class="btn btn-outline" onclick="scrollToId('contact')">
+          <span class="icon">📩</span>
+          Réserver une session
+        </button>
+      </div>
+
+      <div class="hero-note">
+        <span>Très important :</span> tu dois déjà posséder le mode multijoueur.
+        Aucune prise de compte ne sera faite : tu joues sur ton propre compte, tu nous rejoins simplement en jeu.
+      </div>
+    </div>
+
+    <!-- Hero card -->
+    <aside class="hero-card">
+      <div class="glow-orb"></div>
+
+      <div class="hero-card-header">
+        <div class="hero-card-title">Session mise en avant</div>
+        <div class="hero-card-status">
+          <span class="hero-card-status-dot"></span>
+          <span>Places limitées aujourd’hui</span>
+        </div>
+      </div>
+
+      <div class="hero-card-body">
+        <div class="hero-card-grid">
+          <div>
+            <div class="hero-session-title">Lobby Farm XP & Défis</div>
+            <div class="hero-session-meta">
+              Multijoueur : toi + nos consoles immobiles • Ennemis qui ne bougent pas
+            </div>
+            <div class="hero-session-tags">
+              <span class="tag">Ennemis immobiles</span>
+              <span class="tag">0 pression</span>
+              <span class="tag">Farm optimisé</span>
+            </div>
+          </div>
+          <div>
+            <div class="hero-badge-price">À partir de</div>
+            <div class="hero-price">
+              <div class="hero-price-main">19,99€ <span>/ ~1h</span></div>
+              <div class="hero-price-note">Format multijoueur encadré</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-timeline">
+          <span><i>📈</i> 80–150 kills / 10 min (estimation)</span>
+          <span><i>🎯</i> Headshots, longues distances, défis précis</span>
+          <span><i>🕹️</i> Tu joues sur ton compte, aucun accès donné</span>
+        </div>
+      </div>
+
+      <div class="hero-card-footer">
+        <div>
+          Paiement via <strong>PayPal / CB</strong>, puis contact direct avec un agent par email / Discord.
+        </div>
+        <div class="hero-mini-avatars">
+          <div class="hero-mini-avatar">FR</div>
+          <div class="hero-mini-avatar">EU</div>
+          <div class="hero-mini-avatar">MM</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Packs -->
+  <section id="packs">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Nos packs de farm</div>
+      </div>
+      <p class="section-subtitle">
+        Même principe pour tous les packs : parties multijoueur avec toi contre des ennemis immobiles.
+        Tu choisis juste le temps de jeu et l’intensité de ton farm.
+      </p>
+    </div>
+
+    <div class="grid grid-3">
+      <!-- Pack 1 -->
+      <article class="card">
+        <div class="glow-line"></div>
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Pack Découverte</h3>
+            <div class="card-price">9,99€ <span>/ session courte</span></div>
+          </div>
+          <div class="card-badge">Idéal pour tester</div>
+        </div>
+        <p class="card-desc">
+          Une première session pour découvrir le concept : partie multijoueur avec nos consoles immobiles,
+          ennemis qui ne bougent pas, tu récupères tous les kills et l’XP.
+        </p>
+        <div class="card-meta">
+          <span><i>👤</i> Toi + nos agents en jeu</span>
+          <span><i>🎯</i> Défis simples & warm-up</span>
+        </div>
+        <div class="card-footer">
+          <span>Parfait pour tester le service en conditions réelles.</span>
+          <button class="btn btn-primary btn-card" onclick="scrollToId('contact')">
+            Réserver ce pack
+          </button>
+        </div>
+      </article>
+
+      <!-- Pack 2 -->
+      <article class="card card-highlight">
+        <div class="glow-line"></div>
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Pack Farm Intensif</h3>
+            <div class="card-price">19,99€ <span>/ farm optimisé</span></div>
+          </div>
+          <div class="card-badge">Le plus choisi</div>
+        </div>
+        <p class="card-desc">
+          Session dédiée au grind : ennemis immobiles, maps adaptées, rythme régulier.
+          Idéal pour avancer sur camouflages, défis spécifiques et montée d’armes.
+        </p>
+        <div class="card-meta">
+          <span><i>📈</i> 80–150 kills / 10 min (en moyenne)</span>
+          <span><i>🔧</i> Paramètres pensés pour le farm</span>
+        </div>
+        <div class="card-footer">
+          <span><strong>Objectif :</strong> maximiser ton XP et tes défis en un minimum de temps.</span>
+          <button class="btn btn-primary btn-card" onclick="scrollToId('contact')">
+            Réserver ce pack
+          </button>
+        </div>
+      </article>
+
+      <!-- Pack 3 -->
+      <article class="card">
+        <div class="glow-line"></div>
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Pack Session Marathon</h3>
+            <div class="card-price">34,99€ <span>/ session longue</span></div>
+          </div>
+          <div class="card-badge">Longue durée</div>
+        </div>
+        <p class="card-desc">
+          Tu veux tout avancer d’un coup ? On enchaîne les parties multijoueur avec ennemis immobiles
+          pour une grosse session farm, sans pression.
+        </p>
+        <div class="card-meta">
+          <span><i>🕒</i> Pensé pour les longues soirées</span>
+          <span><i>🧠</i> Idéal pour gros objectifs</span>
+        </div>
+        <div class="card-footer">
+          <span>Parfait pour faire un gros step sur ton compte.</span>
+          <button class="btn btn-primary btn-card" onclick="scrollToId('contact')">
+            Réserver ce pack
+          </button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Plus d'informations -->
+  <section id="infos">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Plus d'informations</div>
+      </div>
+      <p class="section-subtitle">
+        Le concept est simple : tu joues des parties multijoueur classiques… sauf que les ennemis
+        en face ne bougent pas.
+      </p>
+    </div>
+
+    <div class="card">
+      <p style="font-size:0.85rem; color:var(--muted); margin-bottom:0.7rem;">
+        🎮 Notre service te donne accès à un nouveau concept : des affrontements multijoueur contre des
+        ennemis immobiles (nos consoles) qui ne t’attaquent pas du tout. Tu restes dans un cadre de partie
+        classique, mais en situation idéale pour le farm.
+      </p>
+      <p style="font-size:0.85rem; color:var(--muted); margin-bottom:0.7rem;">
+        💡 L’objectif : te permettre de relever tous les défis que tu as en tête, qu’il s’agisse de tirs
+        en pleine tête, de précision à longue distance, de tirs accroupi, etc. Tu peux te concentrer sur
+        ta visée et tes objectifs tranquillement.
+      </p>
+      <p style="font-size:0.85rem; color:var(--muted); margin-bottom:0.7rem;">
+        🔓 Tu as carte blanche pour progresser avec n’importe quelle arme : travailler tes camouflages,
+        monter ton niveau, enchaîner les séries de kills… tout en restant dans le mode multijoueur.
+      </p>
+      <p style="font-size:0.85rem; color:var(--muted);">
+        ⏱️ En moyenne, les joueurs constatent entre <strong>80 et 150 éliminations pour 10 minutes de jeu</strong>.
+        Le chiffre exact dépendra de ton niveau, de la map et de ton rythme.
+      </p>
+    </div>
+  </section>
+
+  <!-- Comment ça marche -->
+  <section id="how">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Déroulement d'une session</div>
+      </div>
+      <p class="section-subtitle">
+        Voici comment une session se passe concrètement, étape par étape.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="step-index">1</div>
+          <div>
+            <div class="step-title">Tu passes ta commande</div>
+            <div>
+              Tu choisis ton pack sur le site et tu finalises ta commande.
+              <br>Une fois le paiement validé, tout se passe par email / Discord.
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-index">2</div>
+          <div>
+            <div class="step-title">Tu es mis en contact avec un agent</div>
+            <div>
+              📥 Après ta commande, tu reçois un email qui te met en relation avec un de nos agents.
+              C’est lui qui va organiser la session avec toi (plateforme, horaires…).
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-index">3</div>
+          <div>
+            <div class="step-title">On t’ajoute en jeu et on lance la partie</div>
+            <div>
+              🎮 L’agent t’ajoute dans le jeu, puis lance des parties multijoueur avec toi.
+              En face : une équipe composée uniquement de joueurs immobiles (nos consoles).
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-index">4</div>
+          <div>
+            <div class="step-title">Tu joues comme en partie classique… mais sans danger</div>
+            <div>
+              🕹️ Une fois en jeu, tu es dans un environnement similaire à une partie normale,
+              sauf que les ennemis ne t’attaquent pas. Tu peux enchaîner les kills, tests et défis
+              à ton rythme.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.2rem; font-size:0.8rem; color:var(--muted); border-top:1px solid rgba(148,163,184,0.35); padding-top:0.8rem;">
+        <div style="font-weight:500; color:var(--text); margin-bottom:0.25rem;">Infos importantes</div>
+        <ul style="padding-left:1rem; margin:0;">
+          <li>• <strong>Tu dois posséder le jeu et le mode multijoueur.</strong></li>
+          <li>• Aucune prise de compte : tu gardes ton compte, tu nous rejoins simplement en session.</li>
+          <li>• Nos joueurs immobiles sont lancés depuis nos propres consoles.</li>
+          <li>• Certaines séries / killstreaks peuvent être limitées ou désactivées si elles nuisent au farm.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Avis -->
+  <section id="avis">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Avis des joueurs</div>
+      </div>
+      <p class="section-subtitle">
+        Quelques retours de joueurs ayant utilisé le service pour monter leurs armes et relever leurs défis.
+      </p>
+    </div>
+
+    <div class="grid grid-3">
+      <article class="card">
+        <div class="review">
+          <div class="review-text">
+            “Concept super propre. On est vraiment en multi, mais les ennemis en face ne bougent pas.
+            J’ai pu valider tous mes défis headshots en quelques parties.”
+          </div>
+          <div class="review-footer">
+            <div class="review-user">
+              <div class="review-avatar">LX</div>
+              <div>
+                <div><strong>Luxy</strong></div>
+                <div>PS5 • EU</div>
+              </div>
+            </div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="review">
+          <div class="review-text">
+            “L’agent explique tout par mail, on fixe un créneau, et après c’est simple : tu joins et tu farm.
+            Aucun risque pour le compte, c’est toi qui joues.”
+          </div>
+          <div class="review-footer">
+            <div class="review-user">
+              <div class="review-avatar">ZM</div>
+              <div>
+                <div><strong>ZemRod</strong></div>
+                <div>Xbox • FR</div>
+              </div>
+            </div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="review">
+          <div class="review-text">
+            “Très bon pour avancer sur les camos sans stress. Les ennemis ne réagissent pas, tu peux te concentrer
+            sur la précision et les positions.”
+          </div>
+          <div class="review-footer">
+            <div class="review-user">
+              <div class="review-avatar">NA</div>
+              <div>
+                <div><strong>Naoki</strong></div>
+                <div>PC • BE</div>
+              </div>
+            </div>
+            <div class="review-stars">★★★★☆</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="section-header">
+      <div>
+        <div class="section-title">FAQ rapide</div>
+      </div>
+      <p class="section-subtitle">
+        Les questions les plus fréquentes sur le fonctionnement et la sécurité du service.
+      </p>
+    </div>
+
+    <div class="grid">
+      <div class="faq-item">
+        <div class="faq-question">Est-ce que vous prenez mon compte ?</div>
+        <div>
+          Non. <strong>Aucune prise de compte n’est faite.</strong> Tu joues sur ton propre compte,
+          depuis ta console ou ton PC. Nous te donnons simplement les informations pour rejoindre nos agents en jeu.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Dois-je posséder le jeu multijoueur ?</div>
+        <div>
+          Oui, c’est obligatoire. Tu dois déjà posséder le jeu et avoir accès au mode multijoueur.
+          Sans ça, la session ne peut pas avoir lieu.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Les ennemis bougent-ils ou tirent-ils ?</div>
+        <div>
+          Non. En face, ce sont des joueurs immobiles (nos consoles). Ils ne t’attaquent pas.
+          L’objectif est de te laisser toute la place pour farm ton XP, tes défis et tes camos.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Les kills et l’XP comptent-ils vraiment ?</div>
+        <div>
+          Oui. Tu es en mode multijoueur sur ton compte, donc les éliminations, l’XP et la progression
+          liée à la partie sont bien prises en compte comme d’habitude.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Réserver une session</div>
+      </div>
+      <p class="section-subtitle">
+        Remplis ce formulaire ou contacte-nous directement sur Discord. Un agent reviendra vers toi
+        pour finaliser les détails (horaires, plateforme, type de farm).
+      </p>
+    </div>
+
+    <div class="card contact-grid">
+      <div class="contact-info">
+        <p>
+          Pour une réponse plus rapide, tu peux passer directement par Discord
+          et préciser que tu viens du site “Farm XP BO7”.
+        </p>
+        <div class="discord-tag">
+          <span class="emoji">💬</span>
+          <span>Discord : <strong>TonDiscord#0000</strong></span>
+        </div>
+        <p style="margin-top:0.8rem;">
+          En réservant, tu recevras :
+        </p>
+        <ul style="margin-top:0.4rem; padding-left:1rem; font-size:0.8rem; color:var(--muted);">
+          <li>• Un email de mise en contact avec un agent</li>
+          <li>• Les instructions pour ajouter l’agent en jeu</li>
+          <li>• Les informations pour rejoindre la partie au créneau fixé</li>
+        </ul>
+      </div>
+
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-row-inline">
+          <div>
+            <label for="pseudo">Pseudo / Nom</label>
+            <input id="pseudo" name="pseudo" placeholder="Ton pseudo in-game ou Discord" required />
+          </div>
+          <div>
+            <label for="platform">Plateforme</label>
+            <select id="platform" name="platform" required>
+              <option value="">Choisis ta plateforme</option>
+              <option>PlayStation</option>
+              <option>Xbox</option>
+              <option>PC</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-inline">
+          <div>
+            <label for="pack">Pack souhaité</label>
+            <select id="pack" name="pack" required>
+              <option value="">Sélectionne un pack</option>
+              <option>Pack Découverte</option>
+              <option>Pack Farm Intensif</option>
+              <option>Pack Session Marathon</option>
+              <option>Pack sur-mesure</option>
+            </select>
+          </div>
+          <div>
+            <label for="objectif">Ton objectif principal</label>
+            <input id="objectif" name="objectif" placeholder="Ex : camos, XP armes, défis précis…" />
+          </div>
+        </div>
+
+        <div>
+          <label for="creneaux">Créneaux possibles</label>
+          <input id="creneaux" name="creneaux" placeholder="Ex : ce soir 20h-23h, demain après 18h…" />
+        </div>
+
+        <div>
+          <label for="email">Email de contact</label>
+          <input id="email" name="email" type="email" placeholder="Ton email pour la confirmation" required />
+        </div>
+
+        <div>
+          <label for="message">Message (optionnel)</label>
+          <textarea id="message" name="message" placeholder="Détails, préférences de map, contraintes, etc."></textarea>
+        </div>
+
+        <div class="form-note">
+          Ce formulaire ne déclenche pas encore le paiement automatiquement : un agent te répondra
+          par email ou Discord pour confirmer la session et t’envoyer le lien de paiement.
+        </div>
+
+        <button class="btn btn-primary" type="submit">
+          <span class="icon">📨</span>
+          Envoyer ma demande
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div>© <span id="year"></span> Boutique BO7 Farm XP — Service non officiel, pour joueurs passionnés.</div>
+    <div>
+      <a href="#packs">Packs</a> ·
+      <a href="#contact">Contact</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    window.scrollTo({
+      top: el.offsetTop - 90,
+      behavior: 'smooth'
+    });
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    alert("Ta demande a été prise en compte (démo). Sur le vrai site, elle serait envoyée à ton système (mail, Discord, base de données…).");
+    e.target.reset();
+  }
+</script>
+
+</body>
+</html>
